@@ -1,21 +1,29 @@
 
 class Config:
     NUM_EPISODE = 100
+    NUM_BATCH = 1000
     MEMORY_SIZE = 512
     TRAINING_BATCH_SIZE = 64    # max size
 
     LOG = False
     BACKGROUND = True
 
-    SCREEN_W = SCREEN_H = 64
-    SCREEN_SHAPE = [SCREEN_W, SCREEN_H]
+    SCREEN_SHAPE = [105, 80]
+    SCREEN_H = SCREEN_SHAPE[0]
+    SCREEN_W = SCREEN_SHAPE[1]
     FRAME_PER_ROW = 4
 
     # this maintains versions and setting
     # [DATA_PROFILE, GAME, MAX_EPISODE, EPSILON_FLOOR, EPSILON_START, MOTIVTED, HYBRID_MOT]
     SCENARIOS = [
+                    ["asyn.v0", "pacman", 2, 0.2, 0.7, True, True],
+                    ["asyn.v0", "pacman", 2, 0.2, 0.6, True, True],
+                    ["asyn.v0", "pacman", 2, 0.2, 0.5, True, True],
+                    ["asyn.v0", "pacman", 2, 0.2, 0.4, True, True],
+                    ["asyn.v0", "pacman", 2, 0.2, 0.3, True, True],
+
                     ["acn.v5", "pacman", 10, 0.2, 0.4, True, True],           #0    # R = Ri + Re; 500+ ESP TRAINED
-                    ["acn.v6", "pacman", 10, 0.2, 0.4, True, False],          #1    # R = Ri only
+                    ["acn.v0", "pacman", 10, 0.2, 0.4, True, True],          #1    # R = Ri only
                     ["acn.v7", "pacman", 10, 0.2, 0.4, False, False],         #2    # R = Re only
                     # Sort-of A3c with mixed motivation                       #3-12
                     ["asyn.v1", "pacman", 2, 0.2, 0.8, True, True],
@@ -108,6 +116,7 @@ class Config:
     LOSSES_LOG_PATH = "./data/{0}.{1}.losses.log".format(SCENARIOS[CURRENT_SCENARIO][1], SCENARIOS[CURRENT_SCENARIO][0])
 
     def load_scenario(idx = 0):
+        Config.CURRENT_SCENARIO = idx
         Config.NUM_EPISODE = Config.SCENARIOS[idx][2]
         Config.EPSILON_FLOOR = Config.SCENARIOS[idx][3]
         Config.EPSILON = Config.SCENARIOS[idx][4]
@@ -117,7 +126,7 @@ class Config:
         Config.TRAINING_LOG_PATH = "./data/{0}.{1}.log".format(Config.SCENARIOS[idx][1], Config.SCENARIOS[idx][0])
         Config.LOSSES_LOG_PATH = "./data/{0}.{1}.losses.log".format(Config.SCENARIOS[idx][1], Config.SCENARIOS[idx][0])
         print("========================================================")
-        print("Loading Profile[{0}] {1}.{2}:".format(idx, Config.SCENARIOS[idx][1], Config.SCENARIOS[idx][0]))
+        print("Loading Profile[{0}] {1}.{2}:".format(Config.CURRENT_SCENARIO, Config.SCENARIOS[idx][1], Config.SCENARIOS[idx][0]))
         print("Config Updated with the following...")
         print("Config.NUM_EPISODE: {0}".format(Config.NUM_EPISODE))
         print("Config.EPSILON_FLOOR: {0}".format(Config.EPSILON_FLOOR))

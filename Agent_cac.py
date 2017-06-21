@@ -41,7 +41,7 @@ class ACAgent(object):
 
         self. presist_learning = presist_learning
 
-        input_shape = [-1, Config.SCREEN_W, Config.SCREEN_H, Config.FRAME_PER_ROW]
+        input_shape = [-1, Config.SCREEN_H, Config.SCREEN_W, Config.FRAME_PER_ROW]
         output_shape = [self.action_size]
 
         # Networks
@@ -133,7 +133,7 @@ class ACAgent(object):
 
                 if done:
                     time_diff = agent.reportTimerDiff()
-                    str = "[Episode {0}] Steps: {1} Reward: {2:.5g}, Avg: {3:.5g}, Intrinsic/Step: {4:.5g}, Time: {5}".format(e,agent.timestep,running_reward,reward_sum / (e+1), running_int_reward/self.timestep, time_diff)
+                    str = "[Profile {0}][Episode {1}] Steps: {2} Reward: {3:.5g}, Avg: {4:.5g}, Intrinsic/Step: {5:.5g}, Time: {6}".format(Config.CURRENT_SCENARIO, e,agent.timestep,running_reward,reward_sum / (e+1), running_int_reward/self.timestep, time_diff)
 
                     print(str)
                     self.writeLog(str)
@@ -232,10 +232,11 @@ class ACAgent(object):
 if __name__ == "__main__":
 
     # this allows us to loop through different profile setting to play around with settings
-    max_batch = 1
+    max_batch = Config.NUM_BATCH
     for i in range(0,max_batch):
         # sc_list = list(range(0,len(Config.SCENARIOS)))
-        sc_list = list(range(13, 45))                       # running A3C Hybrid only
+        sc_list = list(range(0, 4))                       # running A3C Hybrid only
+        # sc_list = [1]
         sc_len = len(sc_list)
         j = 0
         random.shuffle(sc_list)

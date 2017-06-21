@@ -51,8 +51,8 @@ class CNN(Model):
     def __init__(self, input_tensor_shape, output_tensor_shape):
         Model.__init__(self, input_tensor_shape, output_tensor_shape)
         self.input_shape_batch = -1
-        self.input_shape_width = input_tensor_shape[1]
-        self.input_shape_height = input_tensor_shape[2]
+        self.input_shape_height = input_tensor_shape[1]
+        self.input_shape_width = input_tensor_shape[2]
         self.input_shape_channels = input_tensor_shape[3]
 
         # assumed to be 1D only
@@ -110,8 +110,8 @@ class GymCNN(CNN):
         self.filter3_stride_d = 3
 
     def build_model(self):
-        # obs_input = tf.placeholder(shape=[None, Config.SCREEN_W, Config.SCREEN_H, Config.FRAME_PER_ROW], dtype=tf.float32)
-        self.obs_input = tf.placeholder(shape=[None, self.input_shape_width, self.input_shape_height, self.input_shape_channels], dtype=tf.float32)
+        # obs_input = tf.placeholder(shape=[None, Config.SCREEN_H, Config.SCREEN_W, Config.FRAME_PER_ROW], dtype=tf.float32)
+        self.obs_input = tf.placeholder(shape=[None, self.input_shape_height, self.input_shape_width, self.input_shape_channels], dtype=tf.float32)
 
         self.cnn1, self.cnn1_w, self.cnn1_b = self.new_cnn_layer(input=self.obs_input,
                                                 num_filters=self.num_filter1,
@@ -145,13 +145,20 @@ class GymCNN(CNN):
                                                     use_relu=True,
                                                     name="FC_1")
 
+        # print(self.obs_input)
+        # print(self.cnn1)
+        # print(self.cnn2)
+        # print(self.cnn3)
+        # print(self.fc_out)
+
+
     # an utility to fix input with batch_size = 1
     def reshape_for_batch(self, input):
         if len(np.shape(input)) == 3:    # if 3D only... i.e. it's a single state
             state = list(np.transpose(input, (1,2,0)))
             input_s = np.reshape(input, (self.input_shape_batch,
-                                            self.input_shape_width,
                                             self.input_shape_height,
+                                            self.input_shape_width,
                                             self.input_shape_channels))
         else:
             input_s = input
