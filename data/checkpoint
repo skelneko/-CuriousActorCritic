@@ -1,2 +1,2 @@
-model_checkpoint_path: "pacman.asyn.v2.data"
-all_model_checkpoint_paths: "pacman.asyn.v2.data"
+model_checkpoint_path: "pacman.asyn.v0.data"
+all_model_checkpoint_paths: "pacman.asyn.v0.data"
